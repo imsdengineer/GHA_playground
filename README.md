@@ -1,21 +1,23 @@
 # Creative/Innovative Projects - Headline
 
-This Project is the Account Creation & Validation Project that aims to enrich the customer experience by simplifying the Tech.
+<span style="color: red;">This Project is fun learning Project that aims to enrich the experience by simplifying the Tech.</span>
 
-# This repo is to enable the App-Dev teams to seamlessly deploy the microservices in GitHub Actions
+
+<span style="font-size: 20px;"># This repo is to enable the App-Dev teams to seamlessly deploy the microservices in GitHub Actions</span>
+
 
 ## Our team
 
 | Name             | Role                | Email                          |
 | ---------------- | ------------------- | ------------------------------ |
-| V Kohli          | Batsman             | v.k@bcci                       |
-| R Sharma         | Batsman             | amalaramadoss.osv@bcci.com     |
-| S Gill           | Batsman             | lohith.bandarupalli@bcci.com   |
-| S Iyer           | Batsman             | @bcci.com                      |
-| K Yadav          | Bowler              |           a@bcci.com           |
+| V Kohli          | Batsman             | v.k@bcci.com                   |
+| R Sharma         | Batsman             | r.s@bcci.com                   |
+| S Gill           | Batsman             | S.Gill             @bcci.com   |
+| S Iyer           | Batsman             | s.iyer@bcci.com                |
+| K Yadav          | Bowler              | k.yadav@bcci.com               |
 | J Bumra          | Bowler              | bumra@bcci.com                 |
-| M Siraj          | Bowler              | siraj@bcci                     |
-| A Patel          | Batsman              | @bcci                         |
+| M Siraj          | Bowler              | siraj@bcci.com                 |
+| A Patel          | Batsman             | A.patel@bcci.                  |
 
 ## More info ~~Fun Facts
 
