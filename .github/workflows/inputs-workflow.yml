@@ -1,0 +1,22 @@
+name: Manual Go/No-Go Trigger
+
+on:
+  workflow_dispatch:
+    inputs:
+      go-nogo-id:
+        description: 'Go/No-Go Identifier'
+        required: true
+        default: 'default-gonogo-id'
+      change-request-id:
+        description: 'Change Request Identifier'
+        required: true
+        default: 'default-change-id'
+
+jobs:
+  run-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Input Values
+        run: |
+          echo "Go/No-Go ID: ${{ github.event.inputs.go-nogo-id }}"
+          echo "CHR ID: ${{ github.event.inputs.change-request-id }}"
