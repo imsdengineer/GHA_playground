@@ -12,12 +12,12 @@ This Project is fun learning Project that aims to enrich the experience by simpl
 | ---------------- | ------------------- | ------------------------------ |
 | V Kohli          | Batsman             | v.k@bcci.com                   |
 | R Sharma         | Batsman             | r.s@bcci.com                   |
-| S Gill           | Batsman             | S.Gill             @bcci.com   |
+| S Gill           | Batsman             | S.Gill@bcci.com                |
 | S Iyer           | Batsman             | s.iyer@bcci.com                |
 | K Yadav          | Bowler              | k.yadav@bcci.com               |
 | J Bumra          | Bowler              | bumra@bcci.com                 |
 | M Siraj          | Bowler              | siraj@bcci.com                 |
-| A Patel          | Batsman             | A.patel@bcci.                  |
+| A Patel          | Batsman             | A.patel@bcci.com               |
 
 ## More info ~~Fun Facts
 
