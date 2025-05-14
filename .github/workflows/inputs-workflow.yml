@@ -1,3 +1,5 @@
+# V1.0.0           Imran Ali        14-05-2025             This is the inputs workflow
+
 name: Manual Go/No-Go Trigger
 
 on:
