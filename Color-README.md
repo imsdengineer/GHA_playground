@@ -1,8 +1,11 @@
 # My Project
 
-Welcome to <span style="color:blue; font-size:18px">My Cool Project</span>!
+Welcome to **My Cool Project**! 🚀
 
 ## Features
 
-- <span style="color:green">Green Feature</span>
-- <span style="color:orange; font-size:16px">Big Orange Feature</span>
+- 🟢 Green Feature
+- 🟠 Orange Feature
+
+![Feature](https://img.shields.io/badge/Feature-Green-brightgreen)
+![Another](https://img.shields.io/badge/Orange%20Feature-orange)
