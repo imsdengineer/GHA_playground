@@ -1,9 +1,9 @@
 # Creative/Innovative Projects - Headline
 
-<span style="color: red;">This Project is fun learning Project that aims to enrich the experience by simplifying the Tech.</span>
+This Project is fun learning Project that aims to enrich the experience by simplifying the Tech.
 
 
-<span style="font-size: 20px;"># This repo is to enable the App-Dev teams to seamlessly deploy the microservices in GitHub Actions</span>
+# This repo is to enable the App-Dev teams to seamlessly deploy the microservices in GitHub Actions</span>
 
 
 ## Our team
