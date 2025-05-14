@@ -11,7 +11,7 @@ on:
         type: string
       change-request-id:
         description: 'Change Request Identifier'
-        default: 'default-change-id'
+        required: false
         type: string
         
 jobs:
