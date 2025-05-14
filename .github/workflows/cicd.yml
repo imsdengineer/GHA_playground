@@ -1,0 +1,108 @@
+name: NGINX CI/CD Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      go-no-id:
+        description: 'Go/No-Go Identifier'
+        required: true
+      change-id:
+        description: 'Change Request ID'
+        required: true
+
+jobs:
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: |
+          docker build -t nginx-dev:latest .
+
+  static-analysis:
+    name: Static Analysis and Tests
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Run ShellCheck (as a placeholder for static analysis)
+        run: |
+          echo "Static analysis simulated"
+          # Replace with: hadolint Dockerfile, trivy image, etc.
+
+      - name: Run Unit Tests
+        run: |
+          echo "Running test suite..."
+          # Add actual test commands if applicable
+          echo "Tests Passed"
+
+  deploy:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+    needs: static-analysis
+    env:
+      KUBECONFIG: /home/runner/.kube/config
+    steps:
+      - name: Set up Kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
+
+      - name: Deploy NGINX Deployment
+        run: |
+          kubectl apply -n dev -f - <<EOF
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: nginx-dev
+            namespace: dev
+            labels:
+              app: nginx
+              env: dev
+              owner: Imran
+              role: admin
+          spec:
+            replicas: 2
+            selector:
+              matchLabels:
+                app: nginx
+            template:
+              metadata:
+                labels:
+                  app: nginx
+                  env: dev
+                  owner: Imran
+                  role: admin
+              spec:
+                containers:
+                - name: nginx
+                  image: nginx:latest
+                  ports:
+                  - containerPort: 80
+          EOF
+
+      - name: Expose NGINX Service (NodePort)
+        run: |
+          kubectl apply -n dev -f - <<EOF
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: nginx-nodeport
+            namespace: dev
+          spec:
+            type: NodePort
+            selector:
+              app: nginx
+            ports:
+              - port: 80
+                targetPort: 80
+                nodePort: 30080
+          EOF
+
+      - name: Show Inputs and Deployment Summary
+        run: |
+          echo "Go/No-Go ID: ${{ github.event.inputs.go-no-id }}"
+          echo "Change Request ID: ${{ github.event.inputs.change-id }}"
+          kubectl get svc -n dev nginx-nodeport
