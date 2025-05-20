@@ -60,7 +60,7 @@ jobs:
       - name: Set up kubectl
         uses: google-github-actions/get-gke-credentials@v2
         with:
-          cluster_name: test-k8s
+          cluster_name: poc-k8s
           location: us-central1-c
           project_id: my-new-env
 
