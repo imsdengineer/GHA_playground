@@ -31,15 +31,15 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          IMAGE_URI="${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/nginx-images/nginx-dev:latest"
-          echo "🔨 Building image: $IMAGE_URI"
-          docker build -t "$IMAGE_URI" .
+          IMAGE="${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/nginx-images/nginx-dev:latest"
+          echo "🔨 Building image: $IMAGE"
+          docker build -t "$IMAGE" .
 
       - name: Push Docker Image
         run: |
-          IMAGE_URI="${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/nginx-images/nginx-dev:latest"
-          echo "🚀 Pushing image: $IMAGE_URI"
-          docker push "$IMAGE_URI"
+          IMAGE="${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/nginx-images/nginx-dev:latest"
+          echo "🚀 Pushing image: $IMAGE"
+          docker push "$IMAGE"
 
   static-analysis:
     needs: build
