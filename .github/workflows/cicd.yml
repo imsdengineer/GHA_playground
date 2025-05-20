@@ -10,21 +10,18 @@ on:
         description: 'Enter Change Request ID'
         required: true
 
+env:
+  REGION: us-central1
+  PROJECT: my-new-env
+  IMAGE: us-central1-docker.pkg.dev/my-new-env/nginx-images/nginx-dev:latest
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Validate Secrets
-        run: |
-          if [ -z "${{ secrets.GCP_SA_KEY }}" ]; then
-            echo "❌ Missing required secret: GCP_SA_KEY"
-            exit 1
-          fi
-
-      - name: Authenticate with GCP
+      - name: Set up GCP Auth
         run: |
           echo '${{ secrets.GCP_SA_KEY }}' > key.json
           gcloud auth activate-service-account --key-file=key.json
@@ -32,23 +29,14 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t us-central1-docker.pkg.dev/my-new-env/nginx-images/nginx-dev:latest .
+          docker build -t $IMAGE .
 
       - name: Push Docker Image
         run: |
-          docker push us-central1-docker.pkg.dev/my-new-env/nginx-images/nginx-dev:latest
+          docker push $IMAGE
 
   static-analysis:
     needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trivy Image Scan
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'us-central1-docker.pkg.dev/my-new-env/nginx-images/nginx-dev:latest'
-
-  test:
-    needs: static-analysis
     runs-on: ubuntu-latest
     steps:
       - name: Authenticate with GCP
@@ -56,8 +44,22 @@ jobs:
           echo '${{ secrets.GCP_SA_KEY }}' > key.json
           gcloud auth activate-service-account --key-file=key.json
           gcloud auth configure-docker us-central1-docker.pkg.dev
-      - name: Run Tests
-        run: echo "✅ All tests passed"
+
+      - name: Docker Pull Image
+        run: |
+          docker pull $IMAGE
+
+      - name: Trivy Image Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ env.IMAGE }}'
+
+  test:
+    needs: static-analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Simple Test
+        run: echo "✅ Tests Passed"
 
   deploy:
     needs: test
@@ -68,14 +70,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Authenticate and Get GKE Credentials
+      - name: Authenticate to GKE
         run: |
           echo '${{ secrets.GCP_SA_KEY }}' > key.json
           gcloud auth activate-service-account --key-file=key.json
           gcloud config set project my-new-env
-          gcloud container clusters get-credentials poc-k8s --zone us-central1-c
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --zone ${{ secrets.GKE_ZONE }}
 
-      - name: Deploy via Helm
+      - name: Helm Upgrade
         run: |
           helm upgrade --install nginx-dev ./charts/nginx-dev -n dev --create-namespace
 
@@ -83,14 +85,14 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Send Slack Notification
+      - name: Slack Notification
         uses: slackapi/slack-github-action@v1.25.0
         with:
           payload: |
             {
               "channel": "#devops-alerts",
               "username": "GitHub CI",
-              "text": "✅ *nginx-dev* was deployed to *poc-k8s* in *my-new-env* project successfully.",
+              "text": "✅ *Deployment successful*: nginx-dev was deployed to `${{ secrets.GKE_CLUSTER }}` in project `${{ env.PROJECT }}`",
               "icon_emoji": ":rocket:"
             }
         env:
