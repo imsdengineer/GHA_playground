@@ -86,11 +86,6 @@ jobs:
           env:
             USE_GKE_GCLOUD_AUTH_PLUGIN: "False"
           run: |
-            # Add required Helm labels/annotations
-            kubectl annotate service nginx-service -n dev \
-              meta.helm.sh/release-name=nginx-dev \
-              meta.helm.sh/release-namespace=dev
-            kubectl label service nginx-service -n dev app.kubernetes.io/managed-by=Helm
             helm upgrade --install nginx-dev ./charts/nginx-dev -n dev --create-namespace
 
 
