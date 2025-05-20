@@ -79,6 +79,8 @@ jobs:
             gcloud container clusters get-credentials poc-k8s --zone us-central1-c --project my-new-env
         
         - name: Helm Upgrade
+          env:
+            USE_GKE_GCLOUD_AUTH_PLUGIN: "False"
           run: |
             helm upgrade --install nginx-dev ./charts/nginx-dev -n dev --create-namespace
 
