@@ -23,14 +23,20 @@ jobs:
             echo "❌ One or more required secrets are missing: GCP_SA_KEY, REGION, GCP_PROJECT"
             exit 1
           fi
-
-      - name: Build Docker Image
+          
+      - name: Authenticate with Google Cloud
         run: |
-          docker build -t ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/nginx-images/nginx-dev:latest .
+          echo '${{ secrets.GCP_SA_KEY }}' > key.json
+          gcloud auth activate-service-account --key-file=key.json
+          gcloud auth configure-docker "${{ secrets.REGION }}-docker.pkg.dev"
+          
+      - name: Build Docker Image with Buildx
+        run: |
+          docker buildx build --load -t "${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/nginx-images/nginx-dev:latest" .
 
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/nginx-images/nginx-dev:latest
+          docker push "${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/nginx-images/nginx-dev:latest"
 
   static-analysis:
     needs: build
