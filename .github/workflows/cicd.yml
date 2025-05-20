@@ -75,8 +75,9 @@ jobs:
             echo '${{ secrets.GCP_SA_KEY }}' > key.json
             gcloud auth activate-service-account --key-file=key.json
             gcloud config set project my-new-env
+            gcloud components install gke-gcloud-auth-plugin --quiet
             gcloud container clusters get-credentials poc-k8s --zone us-central1-c --project my-new-env
-  
+        
         - name: Helm Upgrade
           run: |
             helm upgrade --install nginx-dev ./charts/nginx-dev -n dev --create-namespace
