@@ -1,0 +1,5 @@
+apiVersion: v2
+name: nginx-dev
+version: 0.1.0
+description: Deploy nginx to GKE
+appVersion: "1.21.6"
