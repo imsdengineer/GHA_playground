@@ -15,11 +15,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Docker and GCP Auth
+      - name: Validate Required Secrets
         run: |
-          echo '${{ secrets.GCP_SA_KEY }}' > key.json
-          gcloud auth activate-service-account --key-file=key.json
-          gcloud auth configure-docker ${{ secrets.REGION }}-docker.pkg.dev
+          if [ -z "${{ secrets.GCP_SA_KEY }}" ] || \
+             [ -z "${{ secrets.REGION }}" ] || \
+             [ -z "${{ secrets.GCP_PROJECT }}" ]; then
+            echo "❌ One or more required secrets are missing: GCP_SA_KEY, REGION, GCP_PROJECT"
+            exit 1
+          fi
 
       - name: Build Docker Image
         run: |
