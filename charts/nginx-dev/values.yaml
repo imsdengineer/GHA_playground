@@ -1,0 +1,18 @@
+replicaCount: 2
+
+image:
+  repository: us-central1-docker.pkg.dev/my-new-env/nginx-images/nginx-dev
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 80
+
+labels:
+  app: nginx
+  env: dev
+  owner: Imran
+  role: admin
+
+resources: {}
