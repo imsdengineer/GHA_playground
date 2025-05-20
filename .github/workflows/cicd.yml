@@ -15,7 +15,7 @@ on:
 env:
   PROJECT_ID: kkgcplabs01-008
   REGION: us-central1
-  CLUSTER_NAME: test-k8s
+  CLUSTER_NAME: poc-k8s
   CLUSTER_ZONE: us-central1-c
   NAMESPACE: dev
   IMAGE_NAME: nginx-custom
