@@ -51,6 +51,11 @@ jobs:
     needs: static-analysis
     runs-on: ubuntu-latest
     steps:
+      - name: Authenticate with GCP
+        run: |
+          echo '${{ secrets.GCP_SA_KEY }}' > key.json
+          gcloud auth activate-service-account --key-file=key.json
+          gcloud auth configure-docker us-central1-docker.pkg.dev
       - name: Run Tests
         run: echo "✅ All tests passed"
 
