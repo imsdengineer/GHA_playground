@@ -15,13 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Validate Required Secrets
         run: |
           echo "🔍 Validating secrets..."
-          if [[ -z "${{ secrets.GCP_SA_KEY }}" ]]; then echo "❌ GCP_SA_KEY is missing"; exit 1; fi
-          if [[ -z "${{ secrets.REGION }}" ]]; then echo "❌ REGION is missing"; exit 1; fi
-          if [[ -z "${{ secrets.GCP_PROJECT }}" ]]; then echo "❌ GCP_PROJECT is missing"; exit 1; fi
+          if [ -z "${{ secrets.GCP_SA_KEY }}" ]; then echo "❌ GCP_SA_KEY is missing"; exit 1; fi
+          if [ -z "${{ secrets.REGION }}" ]; then echo "❌ REGION is missing"; exit 1; fi
+          if [ -z "${{ secrets.GCP_PROJECT }}" ]; then echo "❌ GCP_PROJECT is missing"; exit 1; fi
           echo "✅ All required secrets are present."
 
       - name: Authenticate with Google Cloud
