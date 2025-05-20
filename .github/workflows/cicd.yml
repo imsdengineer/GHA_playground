@@ -62,24 +62,25 @@ jobs:
         run: echo "✅ Tests Passed"
 
   deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    environment:
-      name: production
-      url: https://34.118.226.69
-    steps:
-      - uses: actions/checkout@v4
+      needs: test
+      runs-on: ubuntu-latest
+      environment:
+        name: production
+        url: https://34.118.226.69
+      steps:
+        - uses: actions/checkout@v4
+  
+        - name: Authenticate to GKE
+          run: |
+            echo '${{ secrets.GCP_SA_KEY }}' > key.json
+            gcloud auth activate-service-account --key-file=key.json
+            gcloud config set project my-new-env
+            gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --zone ${{ secrets.GKE_ZONE }} --project my-new-env
+  
+        - name: Helm Upgrade
+          run: |
+            helm upgrade --install nginx-dev ./charts/nginx-dev -n dev --create-namespace
 
-      - name: Authenticate to GKE
-        run: |
-          echo '${{ secrets.GCP_SA_KEY }}' > key.json
-          gcloud auth activate-service-account --key-file=key.json
-          gcloud config set project my-new-env
-          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --zone ${{ secrets.GKE_ZONE }}
-
-      - name: Helm Upgrade
-        run: |
-          helm upgrade --install nginx-dev ./charts/nginx-dev -n dev --create-namespace
 
   notify:
     needs: deploy
